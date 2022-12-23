@@ -99,7 +99,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-web-service
+  name: web-service
 spec:
   selector:
     app: nginx
@@ -121,7 +121,7 @@ metadata:
   namespace: kubestatus
 data:
   services: |
-    Web Application=nginx-web-service.default;
+    Web Application=web-service.default;
 ```
 
 apply the value file:
@@ -136,7 +136,7 @@ now Kubestatus is installed on your cluster let's `port-forword` the Kubestatus 
 
 
 ```sh
-k port-forward service/kubestatus-service 8080:8080 
+kubectl port-forward service/kubestatus-service 8080:8080 
 ```
 
 ![](./screenshot/sc-3.png)
