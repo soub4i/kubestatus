@@ -34,7 +34,7 @@ jobs:
         with:
           context: ./image
           push: true
-          tags: name/app:latest
+          tags: soubai/kubestatus:latest
       -
         # Push the new release
         name: Build and Push New Release
@@ -43,4 +43,4 @@ jobs:
         with:
           context: ./image
           push: true
-          tags: name/app:${{ github.event.release.tag_name }}
+          tags: soubai/kubestatus:${{ github.event.release.tag_name }}
