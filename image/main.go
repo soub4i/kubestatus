@@ -29,11 +29,11 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		services := os.Getenv("services")
 
-		var data []Service
+		var data = make([]Service, 0)
 		for _, e := range strings.Split(services, ";") {
 			pair := strings.SplitN(e, "=", 2)
 			if len(pair) == 2 {
-				fmt.Println("Checking: " + pair[0])
+				fmt.Println("Health checking: " + pair[1])
 				chunk := strings.SplitN(pair[1], ":", 2)
 				status := false
 				if len(chunk) == 2 {

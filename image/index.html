@@ -7,7 +7,7 @@
     />
   </head>
   <body>
-    <div>
+    <div x-data="state()" x-init="init()">
       <div class="container mt-5">
         <h2>This is a Server Status Page</h2>
         <p>
@@ -19,13 +19,50 @@
 
         <div class="row">
           <div class="col-md-12">
+            <div class="my-2">
+              <template class="alert alert-danger" x-if="!globalState">
+                <div class="alert alert-danger" role="alert">
+                  <h2>Some of your servers are down</h2>
+                  <p>
+                    Some or All of monitored service by kubestatus are not
+                    healthy
+                  </p>
+                </div>
+              </template>
+              <template x-if="globalState">
+                <div class="alert alert-success" role="alert">
+                  <h2>Your cluster is healthy</h2>
+                  <p>All monitored service by kubestatus are healthy</p>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
             <div class="card">
               <div class="card-header">
                 Server Status
               </div>
-              <div class="card-body" id="services"></div>
+              <div class="card-body">
+                <template x-for="s in services" x-key="s.Name">
+                  <div>
+                    Service :
+                    <span x-text="s.Name"></span>
+                    |
+                    <template x-if="s.Status">
+                      <span class="badge bg-success">UP</span>
+                    </template>
+                    <template x-if="!s.Status">
+                      <span class="badge bg-danger">DOWN</span>
+                    </template>
+                  </div>
+                </template>
+              </div>
               <div class="card-footer text-muted">
-                refresh automatically every 1min
+                <span x-show="!working">refresh automatically every 1min</span>
+                <span x-show="working">Working...</span>
               </div>
             </div>
           </div>
@@ -35,33 +72,42 @@
 
         <div class="row text-center border-top">
           <div class="col-md-12 mt-2">
-            <p>&copy; KubeStatus</p>
+            <p>
+              &copy; KubeStatus
+              <span x-text="new Date().getFullYear()"></span>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </body>
-
+  <script src="//unpkg.com/alpinejs" defer></script>
   <script>
-    function updateUI(service, el) {
-      const p = document.createElement('p')
-      const status = `<span class="badge bg-${
-        service.Status ? 'success' : 'danger'
-      }">${service.Status ? 'UP' : 'DOWN'}</span>`
-      p.innerHTML = `Service: ${service.Name} |  Status: ${status}`
-      el.appendChild(p)
-    }
-
-    const fetchData = async () => {
-      const data = await (await fetch('/status')).json()
-      const services = document.querySelector('#services')
-      services.innerHTML = ''
-
-      for (const service of data) {
-        updateUI(service, services)
+    function state() {
+      return {
+        services: [],
+        globalState: true,
+        working: false,
+        init() {
+          const fetcher = () => {
+            this.working = true
+            fetch('/status')
+              .then((response) => response.json())
+              .then((data) => {
+                this.services = data
+                this.globalState = !data.some((s) => !s)
+              })
+              .catch((e) => {
+                console.log(e)
+              })
+              .finally((_) => {
+                this.working = false
+              })
+          }
+          fetcher()
+          setInterval(fetcher, 60 * 1000)
+        },
       }
     }
-    fetchData()
-    const timer = setInterval(fetchData, 60 * 1000)
   </script>
 </html>
