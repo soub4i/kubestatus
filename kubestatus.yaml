@@ -36,10 +36,16 @@ spec:
         image: soubai/kubestatus
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: "64Mi"
+            cpu: "10m"
         ports:
         - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
         envFrom:
           - configMapRef:
               name: kubestatus-config
@@ -56,3 +62,25 @@ spec:
     app: kubestatus
   ports:
   - port: 8080
+
+---
+# If you  need to add kubestatus to your Ingress consider doing something like 
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: minimal-ingress
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   ingressClassName: nginx-example
+#   rules:
+#   - http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: kubestatus-service
+#             port:
+#               number: 8080
