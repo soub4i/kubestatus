@@ -121,7 +121,7 @@ metadata:
   namespace: kubestatus
 data:
   services: |
-    Web Application=web-service.default;
+    Web app=web-service.default;
 ```
 
 apply the value file:
