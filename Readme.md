@@ -3,7 +3,9 @@
 </p>
 
 
-**Kubestatus** is an free and open-source tool to easily add status page to your Kubernetes cluster that currently display the status (UP or DOWN) of services.
+**Kubestatus** is an free and open-source tool to easily add status page to your Kubernetes cluster that currently display the status (UP or DOWN) of services.It is written in Go and uses the Kubernetes API to fetch information about the clusters and resources.
+
+The tool provides a simple and convenient way to view the current state of your cluster and resources without having to use the kubectl command-line tool or the Kubernetes dashboard and in the same time give you a costumer friendly page that can be used as you main status page.
 
 
 ![](./screenshot.png)
@@ -19,7 +21,7 @@ helm repo add kubestatus https://soub4i.github.io/kubestatus
 ```
 And
 ```console
-helm install kubestatus kubestatus --set services="app=google.com;" --namespace kubestatus --create-namespace --wait
+helm install kubestatus kubestatus/kubestatus --set services="My super app=myservice-name.default;" --namespace kubestatus --create-namespace --wait
 ```
 
 You may also provide a values file instead:
