@@ -10,9 +10,42 @@
 
 
 
-# Install
+### Cluster Installation
+#### Using helm:
+When you have helm installed in your cluster, use the following setup:
 
+```console
+helm repo add kubestatus https://soub4i.github.io/kubestatus
+```
+And
+```console
+helm install kubestatus kubestatus --set services="app=google.com;" --namespace kubestatus --create-namespace --wait
+```
+
+You may also provide a values file instead:
+
+```yaml
+services: "my-app=my-app-service.default;"
+```
+
+And use that:
+
+```console
+$ helm upgrade --install kubestatus kubestatus --values=values-file.yml
+```
 #### Using kubectl:
+
+Clone the repo:
+
+```console
+git clone https://github.com/soub4i/kubestatus
+cd kubestatus
+```
+Create k8s resources:
+
+```console
+kubectl create -f kubestatus.yaml
+```
 
 In order to run Kubestatus in a Kubernetes cluster quickly, the easiest way is for you to update the `ConfigMap` section that will hold Kubestatus configuration.
 
@@ -28,30 +61,7 @@ LABEL=SERVICE_NAME.NAMESPACE:HEALTH_CHECK_ENDPOINT;
 
 Kubestatus support multiple service make sure you add a `;` after each definition
 
-
-
 edit a `kubestatus.yaml`:
-
-```yaml
-kind: ConfigMap 
-apiVersion: v1 
-metadata:
-  name: kubestatus-config
-data:
-  services: |
-    web=web-service.default;
-    api=myapi-service.default;
----
-
-```
-
-
-Create k8s resources:
-
-
-```sh
-kubectl create -f https://raw.githubusercontent.com/soub4i/kubestatus/kubestatus.yaml
-```
 
 This configuration will create: 
 
@@ -60,15 +70,12 @@ This configuration will create:
  - kubestatus-service `Service`
  - kubestatus-config `ConfigMap`
 
-#### Using helm:
 
-coming soon
-
-# example 
+### example 
 
 You created this web application based on nginx image.
 
-```sh
+```console
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -94,7 +101,7 @@ EOF
 
 Exposing the web application using k8s service
 
-```sh
+```console
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
@@ -126,7 +133,7 @@ data:
 
 apply the value file:
 
-```sh
+```console
 kubectl create -f kubestatus.yaml
 ```
 
@@ -135,7 +142,7 @@ kubectl create -f kubestatus.yaml
 now Kubestatus is installed on your cluster let's `port-forword` the Kubestatus service so we can see the status page.
 
 
-```sh
+```console
 kubectl port-forward service/kubestatus-service 8080:8080 
 ```
 
@@ -146,6 +153,6 @@ kubectl port-forward service/kubestatus-service 8080:8080
 
 ![](./screenshot/sc-4.png)
 
-## License
+### License
 
 By contributing, you agree that your contributions will be licensed under its Apache License 2.0.
