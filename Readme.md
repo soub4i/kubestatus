@@ -28,8 +28,9 @@ You may also provide a values file instead:
 
 ```conosle
  helm show values kubestatus/kubestatus > ./kubestatus-values.yaml 
+```
 
-Edit the file `kubestatus-values.yaml `
+Edit the file `kubestatus-values.yaml`
 
 ```yaml
 services: "my-app=my-app-service.default;"
