@@ -1,6 +1,7 @@
 
 
 FROM golang:1.16-buster AS builder
+LABEL maintainer="Abderrahim Soubai @soub4i"
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
