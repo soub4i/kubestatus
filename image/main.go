@@ -29,7 +29,7 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		services := os.Getenv("services")
 
-		var data = make([]Service, 0)
+		var data = make([]Service, 0, 50)
 		for _, e := range strings.Split(services, ";") {
 			pair := strings.SplitN(e, "=", 2)
 			if len(pair) == 2 {
