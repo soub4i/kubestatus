@@ -1,12 +1,14 @@
 name: Docker Build and Push
 
 on:
-  push:
-    branches:
-      - 'main'
+  # push:
+  #   branches: ['main']
+  pull_request:
+    branches: ['main']
+    types:
+      - closed
   release:
     types: [published]
-
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -26,10 +28,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # -
+      #   # Push to master branch - push "latest" tag
+      #   name: Build and Push (latest)
+      #   if: github.event_name == 'push'
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./image
+      #     push: true
+      #     tags: soubai/kubestatus:latest
       -
-        # Push to master branch - push "latest" tag
+        # Push to master branch - pull_request "latest" tag
         name: Build and Push (latest)
-        if: github.event_name == 'push'
+        if: github.event.pull_request.merged == true
         uses: docker/build-push-action@v2
         with:
           context: ./image
