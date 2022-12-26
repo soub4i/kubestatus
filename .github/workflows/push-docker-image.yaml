@@ -5,6 +5,8 @@ on:
   #   branches: ['main']
   pull_request:
     branches: ['main']
+    types:
+      - closed
   release:
     types: [published]
 jobs:
@@ -38,7 +40,7 @@ jobs:
       -
         # Push to master branch - pull_request "latest" tag
         name: Build and Push (latest)
-        if: github.event_name == 'pull_request'
+        if: github.event.pull_request.merged == true
         uses: docker/build-push-action@v2
         with:
           context: ./image
