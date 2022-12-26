@@ -26,6 +26,11 @@ helm install kubestatus kubestatus/kubestatus --set services="My super app=myser
 
 You may also provide a values file instead:
 
+```conosle
+ helm show values kubestatus/kubestatus > ./kubestatus-values.yaml 
+
+Edit the file `kubestatus-values.yaml `
+
 ```yaml
 services: "my-app=my-app-service.default;"
 ```
@@ -33,7 +38,7 @@ services: "my-app=my-app-service.default;"
 And use that:
 
 ```console
-$ helm upgrade --install kubestatus kubestatus --values=values-file.yml
+helm upgrade --install kubestatus kubestatus --values=kubestatus-values.yaml
 ```
 #### Using kubectl:
 
