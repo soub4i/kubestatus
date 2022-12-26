@@ -10,7 +10,6 @@ import (
 
 type Service struct {
 	Name   string
-	URI    string
 	Status bool
 }
 
