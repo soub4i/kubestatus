@@ -42,12 +42,17 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /healthy
               port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /ready
               port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

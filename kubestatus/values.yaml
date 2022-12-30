@@ -15,9 +15,10 @@ nameOverride: "kubestatus"
 fullnameOverride: "kubestatus"
 
 serviceAccount:
-  create: false
-  annotations: {}
-  name: ""
+  create: true
+  annotations:
+  name: "kubestatus-sa"
+  namespace: "kubestatus"
 
 podAnnotations: {}
 
@@ -74,8 +75,5 @@ tolerations: []
 affinity: {}
 
 
-# Add services label and service name so kubestatus can monitor your services
-# format:  LABEL=SERVICE.NAMESPACE:HEALTH_CHECK_ENDPOINT;
-# example: Web_Server=web-server.default or API_Server=api-service.staging:/healthz;
-
-services: ""
+# The namespace to watch services within. 
+namespace: "default"
