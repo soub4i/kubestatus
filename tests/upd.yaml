@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udp-server-deployment
+  annotations:
+    kubestatus/watch: "true"
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: jpoon
+        image: jpoon/udp-server
+        ports:
+          - containerPort: 10001
+            protocol: UDP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udp-server-service
+  labels:
+    app: udp-server
+spec:
+  type: ClusterIP
+  ports:
+  - port: 10001
+    protocol: UDP
+  selector:
+    name: udp-server

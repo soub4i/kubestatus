@@ -8,20 +8,28 @@
 The tool provides a simple and convenient way to view the current state of your cluster and resources without having to use the kubectl command-line tool or the Kubernetes dashboard and in the same time give you a costumer friendly page that can be used as you main status page.
 
 
-![](./screenshot.png)
+
+### Features:
+
+- ⚡ Lightweight
+- 🔧 Zero configuration
+- 📖 Open-source
+- 📫 Support TCP and UDP services
 
 
 
-### Cluster Installation
+### Installation
 #### Using helm:
-When you have helm installed in your cluster, use the following setup:
+
+When you have helm installed in your machine, use the following setup:
 
 ```console
 helm repo add kubestatus https://soub4i.github.io/kubestatus
 ```
-And
+After install the chart
+
 ```console
-helm install kubestatus kubestatus/kubestatus --set services="My super app=myservice-name.default;" --namespace kubestatus --create-namespace --wait
+helm install kubestatus kubestatus/kubestatus --set namespace="default" --n kubestatus --create-namespace --wait
 ```
 
 You may also provide a values file instead:
@@ -33,13 +41,13 @@ You may also provide a values file instead:
 Edit the file `kubestatus-values.yaml`
 
 ```yaml
-services: "my-app=my-app-service.default;"
+namespace: "default"
 ```
 
 And use that:
 
 ```console
-helm upgrade --install kubestatus kubestatus --values=kubestatus-values.yaml
+helm upgrade --install kubestatus kubestatus/kubestatus --values=kubestatus-values.yaml
 ```
 #### Using kubectl:
 
@@ -55,31 +63,19 @@ Create k8s resources:
 kubectl create -f kubestatus.yaml
 ```
 
-In order to run Kubestatus in a Kubernetes cluster quickly, the easiest way is for you to update the `ConfigMap` section that will hold Kubestatus configuration.
+### Configuration 
 
-An example is provided below , do not forget to update it to add your own services while respecting the follow format:
 
+In order to spin up Kubestatus in a Kubernetes cluster quickly, You need to:
+
+- Tell Kubestatus the namespace to watch for that edit `ConfigMap` and update `namespace` value
+- Tell Kubestatus the services to watch for that add annotation `kubestatus/watch='true'` to desired services:
+
+```console
+kubectl annotate svc my-service-name kubestatus/watch='true'
 ```
-LABEL=SERVICE_NAME.NAMESPACE:HEALTH_CHECK_ENDPOINT;
-```
 
-- LABEL: is the name of the service that will be displayed in status page
-- SERVICE_NAME: is Kubernetes service name
-- HEALTH_CHECK_ENDPOINT: if defined the endpoint will be used by Kubestatus to check health of your service. Default value is **/**
-
-Kubestatus support multiple service make sure you add a `;` after each definition
-
-edit a `kubestatus.yaml`:
-
-This configuration will create: 
-
- - kubestatus `Namespace`
- - kubestatus-deployment `Deployment`
- - kubestatus-service `Service`
- - kubestatus-config `ConfigMap`
-
-
-### example 
+### Example 
 
 You created this web application based on nginx image.
 
@@ -123,39 +119,18 @@ spec:
 EOF
 ```
 
-![](./screenshot/sc-1.png)
-
-Update the `ConfigMap` in the [kubestatus.yaml](./kubestatus.yaml) file to look:
-
-
-```yaml
-kind: ConfigMap 
-apiVersion: v1 
-metadata:
-  name: kubestatus-config
-  namespace: kubestatus
-data:
-  services: |
-    Web app=web-service.default;
-```
-
-apply the value file:
+Add annotation to `web-service`:
 
 ```console
-kubectl create -f kubestatus.yaml
+kubectl annotate svc web-service kubestatus/watch='true'
 ```
 
-![](./screenshot/sc-2.png)
 
-now Kubestatus is installed on your cluster let's `port-forword` the Kubestatus service so we can see the status page.
-
+In order to visit kubestatus status page you can `port-forword` the Kubestatus service:
 
 ```console
-kubectl port-forward service/kubestatus-service 8080:8080 
+kubectl port-forward service/kubestatus-service 8080:8080 -n kubestatus
 ```
-
-![](./screenshot/sc-3.png)
-
 
 🚀 Now navigate to http://localhost:8080 you should see your status page like this:
 
