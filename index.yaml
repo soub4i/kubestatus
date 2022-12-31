@@ -2,8 +2,20 @@ apiVersion: v1
 entries:
   kubestatus:
   - apiVersion: v2
+    appVersion: 1.1.1
+    created: "2022-12-31T17:35:07.576769073Z"
+    description: Kubestatus is an free and open-source tool to easily add status page
+      to your Kubernetes cluster that currently display the status (UP or DOWN) of
+      services.
+    digest: 824ba0585f54bd106b2e797ae87742530f55d5d2967f29e768f4a6a4a56df214
+    name: kubestatus
+    type: application
+    urls:
+    - https://soub4i.github.io/kubestatus/kubestatus-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
     appVersion: 1.1.0
-    created: "2022-12-30T18:30:01.759316236Z"
+    created: "2022-12-31T17:35:07.575427867Z"
     description: Kubestatus is an free and open-source tool to easily add status page
       to your Kubernetes cluster that currently display the status (UP or DOWN) of
       services.
@@ -15,7 +27,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-12-30T18:30:01.758878321Z"
+    created: "2022-12-31T17:35:07.573927696Z"
     description: Kubestatus is an free and open-source tool to easily add status page
       to your Kubernetes cluster that currently display the status (UP or DOWN) of
       services.
@@ -25,4 +37,4 @@ entries:
     urls:
     - https://soub4i.github.io/kubestatus/kubestatus-1.0.0.tgz
     version: 1.0.0
-generated: "2022-12-30T18:30:01.750042655Z"
+generated: "2022-12-31T17:35:07.572953968Z"
