@@ -38,10 +38,13 @@ const (
 )
 
 func ping(service string, namespace string, endpoint string, protocol string, port float64) bool {
+
+	var uri string
 	if endpoint == "" {
-		endpoint = "/"
+		uri = fmt.Sprint(service, ".", namespace, ":", port)
+	} else {
+		uri = fmt.Sprint("http://", service, ".", namespace, endpoint)
 	}
-	uri := fmt.Sprint(service, ".", namespace, ":", port, endpoint)
 
 	if protocol == "TCP" {
 		conn, err := net.Dial("tcp", uri)
