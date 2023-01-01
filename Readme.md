@@ -26,11 +26,18 @@ When you have helm installed in your machine, use the following setup:
 ```console
 helm repo add kubestatus https://soub4i.github.io/kubestatus
 ```
+```console
+helm repo update
+```
+
 After install the chart
 
 ```console
 helm install kubestatus kubestatus/kubestatus --set namespace="default" --n kubestatus --create-namespace --wait
 ```
+
+
+
 
 You may also provide a values file instead:
 
