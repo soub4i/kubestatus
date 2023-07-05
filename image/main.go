@@ -140,8 +140,8 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 
 						jsonByte := (*json.RawMessage)(&jsonMarsh)
 
-						e := json.Unmarshal(*jsonByte, &kservice)
-						if e != nil {
+						err = json.Unmarshal(*jsonByte, &kservice)
+						if err != nil {
 							fmt.Println(err)
 						}
 						endpoint := annotations[ENDPOINT_ANNOTATION_KEY]
